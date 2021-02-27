@@ -152,12 +152,14 @@ router.post("/product_buy",(req,res) => {
   const productId = req.body.product_id
   const customer_name = req.body.customer_name
   const customer_number = req.body.customer_number
+  const quantity = req.body.product_quantity
   (async () => {
     sequelize.sync();
     var cusId = await Customer.findOne({where: {phoneNo: customer_number}})
     const productBuy = await ProductBought.create({
       customerId: cusId,
       productId: productId,
+      quantity: quantity,
     });
     res.send(productBuy);
   })();
@@ -180,4 +182,24 @@ router.post("/product_create",(req,res) => {
     res.send(productBuy);
   })();
   res.end()
+})
+
+router.put("/product_update",(req,res) => {
+  const productId = req.body.product_id
+  const customer_name = req.body.customer_name
+  const customer_number = req.body.customer_number
+  const quantity = req.body.product_quantity
+  (async () => {
+    sequelize.sync();
+    const productBuy = await ProductBought.update({
+      productId: productId,
+      quantity: quantity,
+    },
+    {
+      where: {
+        customerId: cusId,
+      }
+    });
+    res.send(productBuy);
+  })();  
 })

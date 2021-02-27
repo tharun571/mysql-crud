@@ -74,4 +74,8 @@ export const ProductBought = sequelize.define("ProductBought", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
