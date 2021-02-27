@@ -120,7 +120,7 @@ router.post("/customer_create", (req, res) => {
 router.post("/vendor_create", (req, res) => {
   const firstName = req.body.vendor_first_name;
   const lastName = req.body.vendor_last_name;
-  const phNum = req.body.vendor_number;
+  const phNum = parseInt(req.body.vendor_number);
   (async () => {
     sequelize.sync();
     const vendor = await Vendor.create({
@@ -132,22 +132,27 @@ router.post("/vendor_create", (req, res) => {
   })();
 });
 
-router.post("/product_buy",(req,res) => {
-  const productId = req.body.product_id
-  const customer_name = req.body.customer_name
-  const customer_number = req.body.customer_number
-  const quantity = req.body.product_quantity
+router.post("/product_buy", (req, res) => {
+  const productId = parseInt(req.body.product_id);
+  const customer_name = req.body.customer_name;
+  const customer_number = parseInt(req.body.customer_number);
+  const quantity = parseInt(req.body.product_quantity);
   (async () => {
     sequelize.sync();
-    const cusId = await Customer.findOne({
+    const customer = await Customer.findOne({
       where: { firstName: customer_name, phoneNo: customer_number },
     });
-    const productBuy = await ProductBought.create({
-      customerId: cusId,
-      productId: productId,
-      quantity: quantity,
-    });
-    res.send(productBuy);
+    if (customer == null) {
+      res.send("No customer");
+    } else {
+      const cusId = customer.id;
+      const productBuy = await ProductBought.create({
+        customerId: parseInt(cusId),
+        productId: productId,
+        quantity: parseInt(quantity),
+      });
+      res.send(productBuy);
+    }
   })();
 });
 
@@ -155,15 +160,16 @@ router.post("/product_create", (req, res) => {
   const vendor_number = req.body.vendor_number;
   const vendor_name = req.body.vendor_name;
   const product_name = req.body.product_name;
-  const prod_qty = req.body.product_quantity;
+  const prod_qty = parseInt(req.body.product_quantity);
   (async () => {
     sequelize.sync();
-    const vendorId = await Vendor.findOne({
+    const vendor = await Vendor.findOne({
       where: { firstName: vendor_name, phoneNo: vendor_number },
     });
-    if (vendorId == null) {
+    if (vendor == null) {
       res.send("Vendor not found");
     } else {
+      const vendorId = vendor.id;
       const product = await Product.create({
         productName: product_name,
         quantity: prod_qty,
@@ -172,8 +178,7 @@ router.post("/product_create", (req, res) => {
       res.send(product);
     }
   })();
-  res.end()
-})
+});
 
 router.delete("/productDelete/:id([0-9]+)", (req, res) => {
   (async () => {
@@ -214,26 +219,29 @@ router.delete("/vendorDelete/:id([0-9]+)", (req, res) => {
   })();
 });
 
-router.put("/product_update",(req,res) => {
-  const productId = req.body.product_id
-  const customer_name = req.body.customer_name
-  const customer_number = req.body.customer_number
-  const quantity = req.body.product_quantity
+router.put("/product_update", (req, res) => {
+  const productId = parseInt(req.body.product_id);
+  const customer_name = req.body.customer_name;
+  const customer_number = parseInt(req.body.customer_number);
+  const quantity = parseInt(req.body.product_quantity);
   (async () => {
     sequelize.sync();
-    const cusId = await Customer.findOne({
+    const customer = await Customer.findOne({
       where: { firstName: customer_name, phoneNo: customer_number },
     });
-    const productBuy = await ProductBought.update({
-      customerId: cusId,
-      productId: productId,
-      quantity: quantity,
-    },
-    {
-      where: {
+    const cusId = customer.id;
+    const productBuy = await ProductBought.update(
+      {
         customerId: cusId,
+        productId: productId,
+        quantity: quantity,
+      },
+      {
+        where: {
+          customerId: cusId,
+        },
       }
-    });
+    );
     res.send(productBuy);
-  })();  
-})
+  })();
+});
