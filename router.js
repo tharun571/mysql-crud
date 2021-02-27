@@ -221,7 +221,11 @@ router.put("/product_update",(req,res) => {
   const quantity = req.body.product_quantity
   (async () => {
     sequelize.sync();
+    const cusId = await Customer.findOne({
+      where: { firstName: customer_name, phoneNo: customer_number },
+    });
     const productBuy = await ProductBought.update({
+      customerId: cusId,
       productId: productId,
       quantity: quantity,
     },
