@@ -1,30 +1,33 @@
 import express from "express";
 import config from "./config.js";
-import mysql from "mysql";
+import bodyParser from "body-parser";
+import { sequelize, Customer, Product } from "./models.js";
 
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const PORT = config.express.port;
-const DATABASE = config.mysql.database;
 
-const conn = mysql.createConnection({
-  host: "localhost",
-  user: config.mysql.user,
-  password: config.mysql.password,
-  database: DATABASE,
+const router = express.Router();
+
+(async () => {
+  await sequelize.sync();
+  const user = await Customer.create({
+    firstName: "a",
+    lastName: "b",
+    phoneNo: "1234567890",
+    address: "hgsfdb",
+  });
+  console.log(user.toJSON());
+})();
+
+router.get("/:id([0-9]+)", (req, res) => {
+  res.send(req.params.id);
 });
 
-conn.connect();
-conn.query("SHOW TABLES", (err, results, _fields) => {
-  if (err) console.log(err);
-  console.log(results);
-});
-conn.end;
-
-app.get("/user", (_, res) => {
-  res.send("Connected");
-});
+app.use("/api", router);
 
 app.listen(PORT, () => {
-  console.log(config.mysql.database);
+  console.log("Connected");
 });
