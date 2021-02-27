@@ -99,3 +99,19 @@ router.get("/productsBought", (_, res) => {
     res.send(productsBought);
   })();
 });
+
+router.post("/customer_create",(req,res) => {
+  const firstName = req.body.first_name
+  const lastName = req.body.last_name
+  const phNum = req.body.phone_number
+  (async () => {
+    sequelize.sync();
+    const customer = await Customer.create({
+      firstName: firstName,
+      lastName: lastName,
+      phoneNo: phNum,
+    });
+    res.send(customer);
+  })();
+  res.end()
+})
