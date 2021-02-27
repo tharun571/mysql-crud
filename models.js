@@ -50,7 +50,7 @@ export const Product = sequelize.define("Product", {
     allowNull: false,
   },
 });
-export const Vendor = sequleize.define("Vendor", {
+export const Vendor = sequelize.define("Vendor", {
   firstName: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -65,13 +65,13 @@ export const Vendor = sequleize.define("Vendor", {
   },
 });
 
-export const ProductBrought = sequleize.define("ProductBrought", {
+export const ProductBought = sequelize.define("ProductBought", {
   customerId: {
-    type: DataTypes.INT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   productId: {
-    type: DataTypes.INT,
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
 });
