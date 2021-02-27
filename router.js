@@ -115,3 +115,69 @@ router.post("/customer_create",(req,res) => {
   })();
   res.end()
 })
+
+router.post("/vendor_create",(req,res) => {
+  const firstName = req.body.vendor_first_name
+  const lastName = req.body.vendor_last_name
+  const phNum = req.body.vendor_number
+  (async () => {
+    sequelize.sync();
+    const vendor = await Customer.create({
+      firstName: firstName,
+      lastName: lastName,
+      phoneNo: phNum,
+    });
+    res.send(vendor);
+  })();
+  res.end()
+})
+
+router.post("/vendor_create",(req,res) => {
+  const firstName = req.body.vendor_first_name
+  const lastName = req.body.vendor_last_name
+  const phNum = req.body.vendor_number
+  (async () => {
+    sequelize.sync();
+    const vendor = await Customer.create({
+      firstName: firstName,
+      lastName: lastName,
+      phoneNo: phNum,
+    });
+    res.send(vendor);
+  })();
+  res.end()
+})
+
+router.post("/product_buy",(req,res) => {
+  const productId = req.body.product_id
+  const customer_name = req.body.customer_name
+  const customer_number = req.body.customer_number
+  (async () => {
+    sequelize.sync();
+    var cusId = await Customer.findOne({where: {phoneNo: customer_number}})
+    const productBuy = await ProductBought.create({
+      customerId: cusId,
+      productId: productId,
+    });
+    res.send(productBuy);
+  })();
+  res.end()
+})
+
+router.post("/product_create",(req,res) => {
+  const vendor_number = req.body.vendor_number
+  const vendor_name = req.body.vendor_name
+  const product_name = req.body.product_name
+  const prod_qty = req.body.product_quantity
+  (async () => {
+    sequelize.sync();
+    var vendorId = await Vendor.findOne({where: {phoneNo: vendor_number}})
+    const product = await Product.create({
+      productName: product_name,
+      quantity: prod_qty,
+      vendorId: vendorId,
+    });
+    res.send(productBuy);
+  })();
+  res.end()
+})
