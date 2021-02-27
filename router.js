@@ -70,18 +70,32 @@ router.post("/vendor", (req, res) => {
 });
 
 router.get("/vendors", (_, res) => {
+  (async () => {
+    sequelize.sync();
     const vendors = await Vendor.findAll();
     res.send(vendors);
+  })();
 });
+
 router.get("/customers", (_, res) => {
+  (async () => {
+    sequelize.sync();
     const customers = await Customer.findAll();
     res.send(customers);
+  })();
 });
 router.get("/products", (_, res) => {
+  (async () => {
+    sequelize.sync();
     const products = await Product.findAll();
     res.send(products);
+  })();
 });
+
 router.get("/productsBought", (_, res) => {
+  (async () => {
+    sequelize.sync();
     const productsBought = await ProductBought.findAll();
     res.send(productsBought);
+  })();
 });
