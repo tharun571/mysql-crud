@@ -9,8 +9,6 @@ function ProductController() {
             else {
                 res.status(200).send(products);
             }
-        
-        
         });
     };
 
@@ -20,10 +18,8 @@ function ProductController() {
                 res.status(500).send("Internal server error. Please try again later");
             }
             else {
-                res.status(200).send(products);
+                res.status(200).send(productsBought);
             }
-        
-        
         });
     };
 
@@ -35,14 +31,11 @@ function ProductController() {
 
         if (!vendor_name || !vendor_number || !product_name || !prod_qty){
             return res.status(501).json({ message: "Fill all fields" });
-        }
-        const vendor = await Vendor.findOne({
-                where: { firstName: vendor_name, phoneNo: vendor_number },
-              });    
+        }    
         if (vendor == null) {
             res.send("Vendor not found");
         } else {
-            ProductService.createProduct(vendor.id, product_name, prod_qty).then(
+            ProductService.createProduct(vendor_name, vendor_number, product_name, prod_qty).then(
                 (product) => {
                     if(!product){
                         res.status(500).send("Internal Server Error. Please try again later");
@@ -51,19 +44,71 @@ function ProductController() {
                         res.status(201).send(product);
                     }
                 }
-
             );
         }    
-
-
-
     };
+
+    const deleteProduct = (req, res) => {
+        ProductService.deleteProduct(req.body.id).then(
+            (product) => {
+                if(!product){
+                    res.status(500).send("Internal Server Error. Please try again later");
+
+                }else {
+                    res.status(201).send(product);
+                }
+            }
+        );
+    };
+
+    const buyProduct = (req, res) => {
+        const productId = parseInt(req.body.product_id);
+        const customer_name = req.body.customer_name;
+        const customer_number = parseInt(req.body.customer_number);
+        const quantity = parseInt(req.body.product_quantity);
+
+        ProductService.buyProduct(productId, customer_name, customer_number, quantity).then(
+            (productBuy) => {
+                if(!productBuy){
+                    res.status(500).send("Internal Server Error. Please try again later");
+
+                }else {
+                    res.status(201).send(productBuy);
+                }
+            }
+        );
+    };
+
+    const updateProduct = (req, res) => {
+        const productId = parseInt(req.body.product_id);
+        const customer_name = req.body.customer_name;
+        const customer_number = parseInt(req.body.customer_number);
+        const quantity = parseInt(req.body.product_quantity);
+
+        ProductService.updateProduct(productId, customer_name, customer_number, quantity).then(
+            (productBuy) => {
+                if(!productBuy){
+                    res.status(500).send("Internal Server Error. Please try again later");
+
+                }else {
+                    res.status(201).send(productBuy);
+                }
+            }
+        );
+
+
+
+    }
+
 
 
     return{
         getAllProducts: getAllProducts,
         getAllProductsBought: getAllProductsBought,
-        createProduct: createProduct
+        createProduct: createProduct,
+        deleteProduct: deleteProduct,
+        buyProduct: buyProduct,
+        updateProduct: updateProduct
     }
 
 }
