@@ -58,6 +58,7 @@ function VendorController() {
     getAll: getAllVendors,
     getById: getVendorById,
     createVendor: createVendor,
+    deleteVendor: deleteVendor,
   };
 
 }
