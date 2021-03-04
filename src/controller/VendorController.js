@@ -1,20 +1,65 @@
-const Vendors = require("../services/VendorServices.js")
+import VendorServices from "../services/VendorServices.js";
 
 function VendorController() {
   const getAllVendors = function(_, res) {
-    Vendors.getAll().then(vendors => res.send(vendors));
+    VendorServices.getAll().then((vendors) => {
+      if (vendors == null) {
+        res.status(500).send("Internal server error. Please try again later");
+      } else {
+        res.status(200).send(vendors);
+      }
+    });
   };
-  const createVendor = (req,res) => {
-    const firstName = req.body.vendor_first_name;
-    const lastName = req.body.vendor_last_name;
-    const phNum = parseInt(req.body.vendor_number);
-    VendorServices.createVendor(firstName,lastName,phNum).then(vendor => res.send(vendor));;
-  }
+
+  const getVendorById = (req, res) => {
+    const id = parseInt(req.params.id);
+    console.log(id);
+    VendorServices.getById(id).then((vendor) => {
+      if (vendor == null) {
+        res.status(404).json({ message: "Vendor not found" });
+      } else {
+        res.status(200).send(customer);
+      }
+    });
+  };
+
+  const createVendor = (req, res) => {
+    const firstName = req.body.first_name;
+    const lastName = req.body.last_name;
+    const phoneNo = parseInt(req.body.phone_number);
+    if (!firstName || !lastName || !phoneNo) {
+      return res.status(501).json({ message: "Fill all fields" });
+    }
+    VendorServices.createVendor(firstName, lastName, phoneNo).then(
+      (vendor) => {
+        if (!vendor) {
+          res.status(500).send("Internal Server Error. Please try again later");
+        } else {
+          res.status(201).send(customer);
+        }
+      }
+    );
+  };
 
   const deleteVendor = (req,res) => {
-      const vendorId = req.body.id;
-      VendorServices.deleteVendor(vendorId).then(message => res.send(message))
+    const vendorId = req.body.id;
+    VendorServices.deleteVendor(vendorId).then((vendor) => {
+      if(vendor == null){
+        res.status(404).json({ message: "Vendor not found" });
+      }
+      else{
+        vendor.destroy();
+        res.status(200).json({ message: "Vendor successfully deleted" });
+      }
+    });
   }
+
+  return {
+    getAll: getAllVendors,
+    getById: getVendorById,
+    createVendor: createVendor,
+  };
+
 }
 
 module.exports = VendorController();

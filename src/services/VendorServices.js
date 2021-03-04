@@ -3,29 +3,31 @@ import { Vendors } from "../models/Vendors.js";
 
 function VendorServices() {
   return {
-    getAll: () => async () => {
+    getAll: async () => {
       sequelize.sync();
-      await Vendors.findAll();
+      const vendors = await Vendors.findAll();
+      return vendors;
     },
-    createVendor: (firstName,lastName,phNum) => async() => {
+    getById: async (id) => {
+      sequelize.sync();
+      return await Vendors.findByPk(id);
+    },
+    createVendor: async(firstName,lastName,phNum) => {
         sequelize.sync();
-        await Vendors.create({
+        const vendor = await Vendors.create({
             firstName: firstName,
             lastName: lastName,
             phoneNo: phNum,
           });
+          console.log(vendor);
+          return vendor;
     },
-    deleteVendor: (id) => async () => {
+    deleteVendor: async(id) =>  {
         sequelize.sync();
         const vendor = await Vendor.findByPk(id);
-        if (vendor == null) {
-          
-        } else {
-          vendor.destroy();
-          res.send("Done");
-        }
+        return vendor;
       }
   };
 }
 
-module.exports = VendorServices();
+export default VendorServices();

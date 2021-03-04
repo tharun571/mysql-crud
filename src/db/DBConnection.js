@@ -1,7 +1,8 @@
-const { Sequelize } = require("sequelize");
+import Sequelize from "sequelize";
+import config from "../../config/config.js";
 
 const DATABASE = config.mysql.database;
-const USERNAME = config.mysql.username;
+const USERNAME = config.mysql.user;
 const PASSWORD = config.mysql.password;
 
 const sequelize = new Sequelize({
@@ -18,4 +19,4 @@ try {
   console.error(err);
 }
 
-module.exports = sequelize;
+export { sequelize };
