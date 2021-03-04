@@ -1,18 +1,21 @@
-import { sequelize } from "../db/DBConnection.js";
-import pkg from "sequelize";
-const { DataTypes } = pkg;
-
-export const ProductsBought = sequelize.define("ProductsBought", {
-  customerId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  productId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  quantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-});
+module.exports = (sequelize, DataTypes) => {
+  const ProductsBought = sequelize.define("ProductsBought", {
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+  });
+  ProductsBought.associate = (models) => {
+    ProductsBought.belongsTo(models.Products, {
+      foreignKey: {
+        allowNull: false,
+      },
+    });
+    ProductsBought.belongsTo(models.Customers, {
+      foreignKey: {
+        allowNull: false,
+      },
+    });
+  };
+  return ProductsBought;
+};

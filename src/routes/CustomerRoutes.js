@@ -1,5 +1,5 @@
-import { Router } from "express";
-import CustomerController from "../controller/CustomerController.js";
+const Router = require("express").Router;
+const CustomerController = require("../controller/CustomerController.js");
 
 const { getAll, createCustomer, getById } = CustomerController;
 
@@ -9,4 +9,4 @@ customerRouter.get("/", getAll);
 customerRouter.post("/create", createCustomer);
 customerRouter.get("/get/:id([0-9]+)", getById);
 
-export default customerRouter;
+module.exports = customerRouter;

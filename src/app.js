@@ -1,8 +1,9 @@
-import express from "express";
-import bodyParser from "body-parser";
-import customerRouter from "./routes/CustomerRoutes.js";
-import productsRouter from "./routes/ProductRoutes.js";
-import vendorRouter from "./routes/VendorRoutes.js";
+const express = require("express");
+const bodyParser = require("body-parser");
+const customerRouter = require("./routes/CustomerRoutes");
+const productsRouter = require("./routes/ProductRoutes");
+const vendorRouter = require("./routes/VendorRoutes");
+const model = require("./db/DBConnection");
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,6 +13,6 @@ app.use(express.static("public"));
 
 app.use("/api/customers", customerRouter);
 app.use("/api/products", productsRouter);
-app.use("/api/vendors",vendorRouter);
+app.use("/api/vendors", vendorRouter);
 
-export { app };
+module.exports = app;

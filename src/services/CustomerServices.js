@@ -1,20 +1,19 @@
-import { sequelize } from "../db/DBConnection.js";
-import { Customers } from "../models/Customers.js";
+const db = require("../db/DBConnection");
 
 function CustomerService() {
   return {
     getAll: async () => {
-      sequelize.sync();
-      const customers = await Customers.findAll();
+      db.sequelize.sync();
+      const customers = await db.Customers.findAll();
       return customers;
     },
     getById: async (id) => {
-      sequelize.sync();
-      return await Customers.findByPk(id);
+      db.sequelize.sync();
+      return await db.Customers.findByPk(id);
     },
     createUser: async (firstName, lastName, phoneNo, address) => {
-      sequelize.sync();
-      const customer = await Customers.create({
+      db.sequelize.sync();
+      const customer = await db.Customers.create({
         firstName: firstName,
         lastName: lastName,
         phoneNo: phoneNo,
@@ -26,4 +25,4 @@ function CustomerService() {
   };
 }
 
-export default CustomerService();
+module.exports = CustomerService();

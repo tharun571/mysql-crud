@@ -1,9 +1,9 @@
-import CustomerService from "../services/CustomerServices.js";
+const CustomerService = require("../services/CustomerServices");
 
 function CustomerController() {
   const getAllCustomers = (_, res) => {
     CustomerService.getAll().then((customers) => {
-      if (!customer) {
+      if (!customers) {
         res.status(500).send("Internal server error. Please try again later");
       } else {
         res.status(200).send(customers);
@@ -48,4 +48,4 @@ function CustomerController() {
   };
 }
 
-export default CustomerController();
+module.exports = CustomerController();

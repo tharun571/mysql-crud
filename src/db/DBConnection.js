@@ -1,5 +1,11 @@
-import Sequelize from "sequelize";
-import config from "../../config/config.js";
+"use strict";
+
+const fs = require("fs");
+const config = require("../../config/config");
+const path = require("path");
+const Sequelize = require("sequelize");
+const basename = path.basename(__filename);
+const db = {};
 
 const DATABASE = config.mysql.database;
 const USERNAME = config.mysql.user;
@@ -12,11 +18,31 @@ const sequelize = new Sequelize({
   password: PASSWORD,
 });
 
-try {
-  await sequelize.authenticate();
-  console.log("Success");
-} catch (err) {
-  console.error(err);
-}
+const appDir = path.dirname(require.main.filename);
 
-export { sequelize };
+fs.readdirSync(appDir + "/models")
+  .filter((file) => {
+    return (
+      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
+    );
+  })
+  .forEach((file) => {
+    console.log(file);
+    const model = require(path.join(appDir + "/models", file))(
+      sequelize,
+      Sequelize.DataTypes
+    );
+    console.log(model.name);
+    db[model.name] = model;
+  });
+
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;
