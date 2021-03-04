@@ -5,9 +5,25 @@ function CustomerService() {
   return {
     getAll: async () => {
       sequelize.sync();
-      await Customers.findAll();
+      const customers = await Customers.findAll();
+      return customers;
+    },
+    getById: async (id) => {
+      sequelize.sync();
+      return await Customers.findByPk(id);
+    },
+    createUser: async (firstName, lastName, phoneNo, address) => {
+      sequelize.sync();
+      const customer = await Customers.create({
+        firstName: firstName,
+        lastName: lastName,
+        phoneNo: phoneNo,
+        address: address,
+      });
+      console.log(customer);
+      return customer;
     },
   };
 }
 
-module.exports = CustomerService();
+export default CustomerService();

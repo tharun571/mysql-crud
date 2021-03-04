@@ -1,5 +1,6 @@
 import { sequelize } from "../db/DBConnection.js";
-const { DataTypes } = require("sequelize");
+import pkg from "sequelize";
+const { DataTypes } = pkg;
 
 export const ProductsBought = sequelize.define("ProductsBought", {
   customerId: {
