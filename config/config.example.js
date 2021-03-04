@@ -3,9 +3,9 @@ let config = {
     port: 4000,
   },
   mysql: {
-    database: "restApi",
-    user: "nanth",
-    password: "nanth",
+    database: "",
+    user: "",
+    password: "",
   },
 };
 
