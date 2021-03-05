@@ -1,8 +1,8 @@
-const VendorServices = require("../services/ProductService.js");
+const ProductService = require("../services/ProductService.js");
 
 function ProductController() {
     const getAllProducts = (_, res) => {
-        ProductService.getAllProducts.then((products) => {
+        ProductService.getAllProducts().then((products) => {
             if(!products){
                 res.status(500).send("Internal server error. Please try again later");
             }
@@ -13,7 +13,7 @@ function ProductController() {
     };
 
     const getAllProductsBought = (_, res) => {
-        ProductService.getAllProductsBought.then((productsBought) => {
+        ProductService.getAllProductsBought().then((productsBought) => {
             if(!productsBought){
                 res.status(500).send("Internal server error. Please try again later");
             }
@@ -32,20 +32,20 @@ function ProductController() {
         if (!vendor_name || !vendor_number || !product_name || !prod_qty){
             return res.status(501).json({ message: "Fill all fields" });
         }    
-        if (vendor == null) {
-            res.send("Vendor not found");
-        } else {
-            ProductService.createProduct(vendor_name, vendor_number, product_name, prod_qty).then(
-                (product) => {
-                    if(!product){
-                        res.status(500).send("Internal Server Error. Please try again later");
-
-                    }else {
-                        res.status(201).send(product);
-                    }
+       
+        ProductService.createProduct(vendor_name, vendor_number, product_name, prod_qty).then(
+            (product) => {
+                if(product == "404"){
+                    res.status(404).json({ message: "Vendor Not Found" });
+                }else if(product == null){
+                    res.status(501).json({ message: "Internal Server Error" });
                 }
-            );
-        }    
+                else {
+                    res.status(201).send(product);
+                }
+            }
+        );
+            
     };
 
     const deleteProduct = (req, res) => {
@@ -99,8 +99,6 @@ function ProductController() {
 
 
     }
-
-
 
     return{
         getAllProducts: getAllProducts,
