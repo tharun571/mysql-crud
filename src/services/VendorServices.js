@@ -1,20 +1,19 @@
-import { sequelize } from "../db/DBConnection.js";
-import { Vendors } from "../models/Vendors.js";
+const db = require("../db/DBConnection");
 
 function VendorServices() {
   return {
     getAll: async () => {
-      sequelize.sync();
-      const vendors = await Vendors.findAll();
+      db.sequelize.sync();
+      const vendors = await dB.Vendors.findAll();
       return vendors;
     },
     getById: async (id) => {
-      sequelize.sync();
-      return await Vendors.findByPk(id);
+      db.sequelize.sync();
+      return await dB.Vendors.findByPk(id);
     },
     createVendor: async(firstName,lastName,phNum) => {
-        sequelize.sync();
-        const vendor = await Vendors.create({
+        db.sequelize.sync();
+        const vendor = await dB.Vendors.create({
             firstName: firstName,
             lastName: lastName,
             phoneNo: phNum,
@@ -23,8 +22,8 @@ function VendorServices() {
           return vendor;
     },
     deleteVendor: async(id) =>  {
-        sequelize.sync();
-        const vendor = await Vendor.findByPk(id);
+        db.sequelize.sync();
+        const vendor = await dB.Vendor.findByPk(id);
         return vendor;
       }
   };

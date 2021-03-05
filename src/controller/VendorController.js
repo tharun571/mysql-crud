@@ -1,7 +1,7 @@
-import VendorServices from "../services/VendorServices.js";
+const VendorServices = require("../services/VendorServices.js");
 
 function VendorController() {
-  const getAllVendors = function(_, res) {
+  const getAllVendors = (_, res) => {
     VendorServices.getAll().then((vendors) => {
       if (vendors == null) {
         res.status(500).send("Internal server error. Please try again later");
@@ -24,9 +24,9 @@ function VendorController() {
   };
 
   const createVendor = (req, res) => {
-    const firstName = req.body.first_name;
-    const lastName = req.body.last_name;
-    const phoneNo = parseInt(req.body.phone_number);
+    const firstName = req.body.vendor_first_name;
+    const lastName = req.body.vendor_last_name;
+    const phoneNo = parseInt(req.body.vendor_phoneNo);
     if (!firstName || !lastName || !phoneNo) {
       return res.status(501).json({ message: "Fill all fields" });
     }

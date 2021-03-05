@@ -5,7 +5,7 @@ const { getAll, getById, createVendor, deleteVendor } = VendorController;
 
 const vendorRoute = Router();
 
-vendorRoute.get("/vendors", getAll);
+vendorRoute.get("/", getAll);
 vendorRoute.post("/createVendor", createVendor);
 vendorRoute.get("/getVendor/:id([0-9]+)", getById);
 vendorRoute.delete("/vendorDelete/:id([0-9]+)",deleteVendor);
