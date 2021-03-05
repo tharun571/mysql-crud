@@ -19,8 +19,17 @@ function CustomerService() {
         phoneNo: phoneNo,
         address: address,
       });
-      console.log(customer);
       return customer;
+    },
+    deleteCustomer: async (id) => {
+      db.sequelize.sync();
+      const customer = await db.Customers.findByPk(id);
+      if (customer == null) {
+        return false;
+      } else {
+        await customer.destroy();
+        return true;
+      }
     },
   };
 }

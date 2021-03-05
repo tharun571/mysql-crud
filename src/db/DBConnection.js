@@ -20,7 +20,7 @@ const sequelize = new Sequelize({
 
 const appDir = path.dirname(require.main.filename);
 
-fs.readdirSync(appDir + "\\src\\models")
+fs.readdirSync(appDir + "/models")
   .filter((file) => {
     return (
       file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
@@ -28,7 +28,7 @@ fs.readdirSync(appDir + "\\src\\models")
   })
   .forEach((file) => {
     console.log(file);
-    const model = require(path.join(appDir + "\\src\\models", file))(
+    const model = require(path.join(appDir + "/models", file))(
       sequelize,
       Sequelize.DataTypes
     );

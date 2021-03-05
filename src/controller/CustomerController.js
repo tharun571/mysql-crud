@@ -41,10 +41,22 @@ function CustomerController() {
       }
     );
   };
+
+  const deleteCustomer = (req, res) => {
+    const id = parseInt(req.params.id);
+    CustomerService.deleteCustomer(id).then((status) => {
+      if (!status) {
+        res.status(404).send("User with id " + id + " cannot be deleted");
+      } else {
+        res.status(200).send("Successfully deleted");
+      }
+    });
+  };
   return {
     getAll: getAllCustomers,
     getById: getCustomerById,
     createCustomer: createCustomer,
+    deleteCustomer: deleteCustomer,
   };
 }
 
