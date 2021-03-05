@@ -18,7 +18,7 @@ function VendorController() {
       if (vendor == null) {
         res.status(404).json({ message: "Vendor not found" });
       } else {
-        res.status(200).send(customer);
+        res.status(200).send(vendor);
       }
     });
   };
@@ -32,22 +32,25 @@ function VendorController() {
     }
     VendorServices.createVendor(firstName, lastName, phoneNo).then(
       (vendor) => {
+        console.log(vendor);
         if (!vendor) {
           res.status(500).send("Internal Server Error. Please try again later");
         } else {
-          res.status(201).send(customer);
+          res.status(201).send(vendor);
         }
       }
     );
   };
 
   const deleteVendor = (req,res) => {
-    const vendorId = req.body.id;
+    const vendorId = req.params.id;
+    console.log(vendorId)
     VendorServices.deleteVendor(vendorId).then((vendor) => {
       if(vendor == null){
         res.status(404).json({ message: "Vendor not found" });
       }
       else{
+        console.log(vendor)
         vendor.destroy();
         res.status(200).json({ message: "Vendor successfully deleted" });
       }

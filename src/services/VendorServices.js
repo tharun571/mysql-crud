@@ -4,16 +4,16 @@ function VendorServices() {
   return {
     getAll: async () => {
       db.sequelize.sync();
-      const vendors = await dB.Vendors.findAll();
+      const vendors = await db.Vendors.findAll();
       return vendors;
     },
     getById: async (id) => {
       db.sequelize.sync();
-      return await dB.Vendors.findByPk(id);
+      return await db.Vendors.findByPk(id);
     },
     createVendor: async(firstName,lastName,phNum) => {
         db.sequelize.sync();
-        const vendor = await dB.Vendors.create({
+        const vendor = await db.Vendors.create({
             firstName: firstName,
             lastName: lastName,
             phoneNo: phNum,
@@ -23,10 +23,9 @@ function VendorServices() {
     },
     deleteVendor: async(id) =>  {
         db.sequelize.sync();
-        const vendor = await dB.Vendor.findByPk(id);
-        return vendor;
+        return await db.Vendors.findByPk(id);
       }
   };
 }
 
-export default VendorServices();
+module.exports = VendorServices();

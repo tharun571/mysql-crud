@@ -1,4 +1,4 @@
-import ProductService from "../services/ProductService.js"
+const VendorServices = require("../services/ProductService.js");
 
 function ProductController() {
     const getAllProducts = (_, res) => {
@@ -113,4 +113,4 @@ function ProductController() {
 
 }
 
-export default ProductController();
+module.exports = ProductController();

@@ -1,27 +1,25 @@
-import { sequelize } from "../db/DBConnection.js";
-import { Product } from "../models/Products.js";
-import { ProductBought } from "../models/ProductsBought.js";
+const db = require("../db/DBConnection");
 
 function ProductService() {
     return{
         getAllProducts: async () => {
-            sequelize.sync();
-            const products = await Product.findAll();
+            db.sequelize.sync();
+            const products = await db.Product.findAll();
             return products;
           },
 
         getAllProductsBought: async () => {
-            sequelize.sync();
-            const productsBought = await Product.findAll();
+            db.sequelize.sync();
+            const productsBought = await db.Product.findAll();
             return productsBought;
           },  
 
         createProduct: async(vendor_name, vendor_number, product_name, prod_qty) => {
-            sequelize.sync();
-            const vendor = await Vendor.findOne({
+            db.sequelize.sync();
+            const vendor = await db.Vendor.findOne({
                 where: { firstName: vendor_name, phoneNo: vendor_number },
               });
-            const product = await Product.create({
+            const product = await db.Product.create({
                 productName: product_name,
                 quantity: prod_qty,
                 vendorId: vendor.vendorId,
@@ -31,8 +29,8 @@ function ProductService() {
           },
 
         deleteProduct: async(productId) =>{
-            sequelize.sync();
-            const product = await Product.findByPk(productId);
+            db.sequelize.sync();
+            const product = await db.Product.findByPk(productId);
             if (product == null) {
                 res.send("No product found");
             } else {
@@ -42,8 +40,8 @@ function ProductService() {
         },  
 
         buyProduct : async(productId, customer_name, customer_number, quantity) => {
-            sequelize.sync();
-            const customer = await Customer.findOne({
+            db.sequelize.sync();
+            const customer = await db.Customer.findOne({
                 where: { firstName: customer_name, phoneNo: customer_number },
               });
               if (customer == null) {
@@ -60,12 +58,12 @@ function ProductService() {
         },
 
         updateProduct : async(productId, customer_name, customer_number, quantity) => {
-            sequelize.sync();
-            const customer = await Customer.findOne({
+            db.sequelize.sync();
+            const customer = await db.Customer.findOne({
                 where: { firstName: customer_name, phoneNo: customer_number },
               });
               const cusId = customer.id;
-              const productBuy = await ProductBought.update(
+              const productBuy = await db.ProductBought.update(
                 {
                   customerId: cusId,
                   productId: productId,
@@ -82,4 +80,4 @@ function ProductService() {
     };
 
 }
-export default ProductService();
+module.exports = ProductService();
